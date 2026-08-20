@@ -23,6 +23,8 @@ export const metadata = {
   description: 'Browse handmade crochet bags, totes, clutches and accessories by Balora Bags.',
 };
 
+export const dynamic = 'force-dynamic';
+
 export default async function ShopPage({ searchParams }: ShopPageProps) {
   const page = Math.max(1, parseInt(searchParams.page || '1', 10));
 

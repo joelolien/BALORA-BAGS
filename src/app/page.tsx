@@ -2,6 +2,12 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { prisma } from '@/lib/prisma';
 import { ProductCard } from '@/components/product/product-card';
+import { NewsletterForm } from '@/components/newsletter-form';
+
+// Render this page fresh on each request instead of at build time, since
+// product data changes constantly and the database may not be migrated yet
+// at the moment of a given deployment.
+export const dynamic = 'force-dynamic';
 
 async function getHomeData() {
   const [featured, newArrivals, bestSellers, categories] = await Promise.all([
@@ -226,12 +232,7 @@ export default async function HomePage() {
       <section className="section-padding py-20 bg-sand text-center">
         <p className="eyebrow mb-3">Stay Updated</p>
         <h2 className="text-3xl md:text-4xl mb-6">Be first to hear about our next drop</h2>
-        <form onSubmit={(e) => e.preventDefault()} className="flex max-w-md mx-auto">
-          <input type="email" required placeholder="Email address" className="input-field" />
-          <button type="submit" className="btn-primary shrink-0">
-            Subscribe
-          </button>
-        </form>
+        <NewsletterForm />
       </section>
     </div>
   );

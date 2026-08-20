@@ -1,5 +1,8 @@
+'use client';
+
 import Link from 'next/link';
 import { Instagram, Music2 } from 'lucide-react';
+import { toast } from 'sonner';
 
 const SHOP_LINKS = [
   { href: '/shop', label: 'All Bags' },
@@ -18,6 +21,11 @@ const HELP_LINKS = [
 ];
 
 export function Footer() {
+  function handleNewsletterSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    toast.success("You're on the list — thanks for signing up!");
+  }
+
   return (
     <footer className="bg-forest-dark text-cream mt-24">
       <div className="max-w-8xl mx-auto section-padding py-16 grid grid-cols-1 md:grid-cols-4 gap-12">
@@ -65,7 +73,7 @@ export function Footer() {
         <div>
           <p className="eyebrow text-cream/60 mb-4">Stay updated</p>
           <p className="text-sm text-cream/70 mb-4">Be first to hear about our next drop.</p>
-          <form className="flex" onSubmit={(e) => e.preventDefault()}>
+          <form className="flex" onSubmit={handleNewsletterSubmit}>
             <input
               type="email"
               required
