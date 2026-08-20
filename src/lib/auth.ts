@@ -39,16 +39,13 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
-        // @ts-expect-error - role added by authorize()
         token.role = user.role;
       }
       return token;
     },
     async session({ session, token }) {
       if (session.user) {
-        // @ts-expect-error - extending default session
         session.user.id = token.id;
-        // @ts-expect-error - extending default session
         session.user.role = token.role;
       }
       return session;
@@ -65,7 +62,6 @@ export function getAuthSession() {
 /** Throws-free helper: returns the session only if the user is an admin. */
 export async function requireAdmin() {
   const session = await getAuthSession();
-  // @ts-expect-error - role added in callbacks
   if (!session || session.user?.role !== 'ADMIN') {
     return null;
   }
