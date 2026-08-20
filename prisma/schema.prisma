@@ -1,0 +1,320 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ────────────────────────────────────────────────────────────
+// USERS & AUTH
+// ────────────────────────────────────────────────────────────
+
+enum Role {
+  CUSTOMER
+  ADMIN
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String
+  email         String    @unique
+  phone         String?
+  passwordHash  String
+  role          Role      @default(CUSTOMER)
+  emailVerified DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  addresses      Address[]
+  orders         Order[]
+  reviews        Review[]
+  wishlistItems  WishlistItem[]
+  resetTokens    PasswordResetToken[]
+
+  @@index([email])
+}
+
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
+
+model Address {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  label       String   @default("Home")
+  fullName    String
+  phone       String
+  addressLine String
+  city        String
+  region      String
+  isDefault   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+
+  @@index([userId])
+}
+
+// ────────────────────────────────────────────────────────────
+// CATALOG
+// ────────────────────────────────────────────────────────────
+
+model Category {
+  id          String    @id @default(cuid())
+  name        String    @unique
+  slug        String    @unique
+  description String?
+  imageUrl    String?
+  sortOrder   Int       @default(0)
+  isActive    Boolean   @default(true)
+  products    Product[]
+  createdAt   DateTime  @default(now())
+}
+
+model Product {
+  id                String    @id @default(cuid())
+  name              String
+  slug              String    @unique
+  sku               String    @unique
+  description       String
+  materials         String?
+  price             Decimal   @db.Decimal(10, 2)
+  salePrice         Decimal?  @db.Decimal(10, 2)
+  stock             Int       @default(0)
+  lowStockThreshold Int       @default(3)
+  isFeatured        Boolean   @default(false)
+  isBestSeller      Boolean   @default(false)
+  isNewArrival      Boolean   @default(true)
+  isActive          Boolean   @default(true)
+  isCustomOrder     Boolean   @default(false)
+
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id])
+
+  images     ProductImage[]
+  variants   ProductVariant[]
+  colours    ProductColour[]
+  reviews    Review[]
+  orderItems OrderItem[]
+  wishlisted WishlistItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([categoryId])
+  @@index([isFeatured])
+  @@index([isBestSeller])
+  @@index([isNewArrival])
+}
+
+model ProductImage {
+  id        String  @id @default(cuid())
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  url       String
+  altText   String?
+  sortOrder Int     @default(0)
+
+  @@index([productId])
+}
+
+model ProductColour {
+  id        String  @id @default(cuid())
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  name      String
+  hex       String
+
+  @@index([productId])
+}
+
+model ProductVariant {
+  id        String  @id @default(cuid())
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  name      String // e.g. "Size", "Strap length"
+  value     String // e.g. "Small", "Long strap"
+  stock     Int     @default(0)
+
+  @@index([productId])
+}
+
+// ────────────────────────────────────────────────────────────
+// REVIEWS & WISHLIST
+// ────────────────────────────────────────────────────────────
+
+model Review {
+  id         String   @id @default(cuid())
+  productId  String
+  product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  orderId    String
+  rating     Int
+  comment    String
+  isApproved Boolean  @default(true)
+  createdAt  DateTime @default(now())
+
+  @@index([productId])
+  @@unique([productId, userId, orderId])
+}
+
+model WishlistItem {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, productId])
+}
+
+// ────────────────────────────────────────────────────────────
+// ORDERS
+// ────────────────────────────────────────────────────────────
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PROCESSING
+  READY_FOR_DELIVERY
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  CANCELLED
+  REFUNDED
+}
+
+model Order {
+  id              String        @id @default(cuid())
+  orderNumber     String        @unique
+  userId          String?
+  user            User?         @relation(fields: [userId], references: [id])
+
+  customerName    String
+  customerEmail   String
+  customerPhone   String
+  deliveryAddress String
+  city            String
+  region          String
+  deliveryNotes   String?
+  deliveryMethod  String        @default("Standard Delivery")
+
+  subtotal        Decimal       @db.Decimal(10, 2)
+  deliveryFee     Decimal       @db.Decimal(10, 2) @default(0)
+  discountAmount  Decimal       @db.Decimal(10, 2) @default(0)
+  total           Decimal       @db.Decimal(10, 2)
+
+  promoCodeId     String?
+  promoCode       PromoCode?    @relation(fields: [promoCodeId], references: [id])
+
+  status          OrderStatus   @default(PENDING)
+  paymentStatus   PaymentStatus @default(PENDING)
+
+  items           OrderItem[]
+  payment         Payment?
+
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@index([userId])
+  @@index([orderNumber])
+  @@index([status])
+}
+
+model OrderItem {
+  id          String   @id @default(cuid())
+  orderId     String
+  order       Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId   String
+  product     Product  @relation(fields: [productId], references: [id])
+  productName String
+  variantInfo String?
+  colour      String?
+  quantity    Int
+  unitPrice   Decimal  @db.Decimal(10, 2)
+
+  @@index([orderId])
+  @@index([productId])
+}
+
+model Payment {
+  id            String        @id @default(cuid())
+  orderId       String        @unique
+  order         Order         @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  provider      String        @default("paystack")
+  reference     String        @unique
+  channel       String? // mobile_money, card, bank_transfer, cash
+  amount        Decimal       @db.Decimal(10, 2)
+  status        PaymentStatus @default(PENDING)
+  rawResponse   Json?
+  createdAt     DateTime      @default(now())
+  verifiedAt    DateTime?
+}
+
+// ────────────────────────────────────────────────────────────
+// PROMO CODES
+// ────────────────────────────────────────────────────────────
+
+enum DiscountType {
+  PERCENTAGE
+  FIXED
+}
+
+model PromoCode {
+  id              String       @id @default(cuid())
+  code            String       @unique
+  discountType    DiscountType
+  discountValue   Decimal      @db.Decimal(10, 2)
+  minOrderValue   Decimal      @db.Decimal(10, 2) @default(0)
+  usageLimit      Int?
+  usageCount      Int          @default(0)
+  expiresAt       DateTime?
+  isActive        Boolean      @default(true)
+  createdAt       DateTime     @default(now())
+
+  orders          Order[]
+}
+
+// ────────────────────────────────────────────────────────────
+// DELIVERY / SETTINGS
+// ────────────────────────────────────────────────────────────
+
+model DeliveryZone {
+  id                String   @id @default(cuid())
+  region            String
+  city              String
+  fee               Decimal  @db.Decimal(10, 2)
+  estimatedDays     String   @default("1-3 working days")
+  isPickupAvailable Boolean  @default(false)
+  isActive          Boolean  @default(true)
+
+  @@unique([region, city])
+}
+
+model StoreSettings {
+  id              String  @id @default("singleton")
+  businessName    String  @default("Balora Bags")
+  logoUrl         String?
+  email           String  @default("balora.bagss@gmail.com")
+  phone           String?
+  whatsappNumber  String  @default("233540784922")
+  instagramHandle String  @default("balora_bags")
+  tiktokHandle    String  @default("balora.bags")
+  currency        String  @default("GHS")
+  businessHours   String  @default("Mon–Fri: 9:00 AM – 6:00 PM, Sat: 10:00 AM – 4:00 PM, Sun: Closed")
+  updatedAt       DateTime @updatedAt
+}
