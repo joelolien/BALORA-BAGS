@@ -6,8 +6,8 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function formatGHS(amount: number | string) {
-  const value = typeof amount === 'string' ? parseFloat(amount) : amount;
+export function formatGHS(amount: number | string | { toString(): string }) {
+  const value = typeof amount === 'number' ? amount : parseFloat(amount.toString());
   return new Intl.NumberFormat('en-GH', {
     style: 'currency',
     currency: 'GHS',
