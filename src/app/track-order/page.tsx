@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { Suspense, useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Check } from 'lucide-react';
 import { formatGHS } from '@/lib/utils';
@@ -16,7 +16,7 @@ const STAGE_LABELS: Record<string, string> = {
   DELIVERED: 'Delivered',
 };
 
-export default function TrackOrderPage() {
+function TrackOrderContent() {
   const params = useSearchParams();
   const [orderNumber, setOrderNumber] = useState(params.get('order') || '');
   const [contact, setContact] = useState('');
@@ -134,5 +134,13 @@ export default function TrackOrderPage() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function TrackOrderPage() {
+  return (
+    <Suspense fallback={null}>
+      <TrackOrderContent />
+    </Suspense>
   );
 }
