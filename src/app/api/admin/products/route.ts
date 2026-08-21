@@ -54,10 +54,17 @@ export async function POST(req: Request) {
           create: (body.images || []).map((url: string, i: number) => ({ url, sortOrder: i })),
         },
         colours: {
-          create: (body.colours || []).map((c: { name: string; hex: string }) => c),
+          create: (body.colours || []).map((c: { name: string; hex: string }) => ({
+            name: c.name,
+            hex: c.hex,
+          })),
         },
         variants: {
-          create: (body.variants || []).map((v: { name: string; value: string; stock: number }) => v),
+          create: (body.variants || []).map((v: { name: string; value: string; stock: number }) => ({
+            name: v.name,
+            value: v.value,
+            stock: v.stock === undefined || v.stock === null || v.stock === ('' as any) ? 0 : Number(v.stock),
+          })),
         },
       },
       include: { images: true, colours: true, variants: true },

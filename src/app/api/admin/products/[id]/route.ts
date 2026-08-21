@@ -40,7 +40,10 @@ export async function PATCH(req: Request, { params }: { params: { id: string } }
           ? {
               colours: {
                 deleteMany: {},
-                create: body.colours,
+                create: body.colours.map((c: { name: string; hex: string }) => ({
+                  name: c.name,
+                  hex: c.hex,
+                })),
               },
             }
           : {}),
@@ -48,7 +51,11 @@ export async function PATCH(req: Request, { params }: { params: { id: string } }
           ? {
               variants: {
                 deleteMany: {},
-                create: body.variants,
+                create: body.variants.map((v: { name: string; value: string; stock: number }) => ({
+                  name: v.name,
+                  value: v.value,
+                  stock: v.stock === undefined || v.stock === null || v.stock === ('' as any) ? 0 : Number(v.stock),
+                })),
               },
             }
           : {}),
