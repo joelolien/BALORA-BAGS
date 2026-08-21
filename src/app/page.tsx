@@ -53,8 +53,17 @@ export default async function HomePage() {
   return (
     <div>
       {/* HERO */}
-      <section className="relative min-h-[80vh] flex items-center section-padding py-24 overflow-hidden bg-gradient-to-br from-forest via-forest to-forest-dark">
-        <div className="absolute inset-0 opacity-[0.07]" style={{ backgroundImage: 'radial-gradient(circle, #FBF0F2 1px, transparent 1px)', backgroundSize: '28px 28px' }} />
+      <section className="relative min-h-[80vh] flex items-center section-padding py-24 overflow-hidden">
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover -z-10"
+        >
+          <source src="/videos/hero.mp4" type="video/mp4" />
+        </video>
+        <div className="absolute inset-0 bg-gradient-to-t from-ink/70 via-ink/30 to-ink/40 -z-10" />
         <div className="relative max-w-2xl text-cream animate-fadeUp">
           <p className="eyebrow text-sand mb-4">Handmade in Accra, Ghana</p>
           <h1 className="font-display text-5xl md:text-7xl leading-[1.05] mb-6">
@@ -123,8 +132,8 @@ export default async function HomePage() {
       {/* PROMO BANNER */}
       <section className="relative py-24 section-padding text-center overflow-hidden">
         <Image
-          src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?q=80&w=2000&auto=format&fit=crop"
-          alt="Balora promotional collection"
+          src="/images/promo-clutch.jpg"
+          alt="Balora handmade crochet clutch"
           fill
           className="object-cover -z-10"
         />
