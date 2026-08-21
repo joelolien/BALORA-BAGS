@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import Link from 'next/link';
 
 export const metadata = { title: 'About Us', description: "Balora Bags' brand story — handmade crochet bags, inspired by balance." };
@@ -6,17 +5,11 @@ export const metadata = { title: 'About Us', description: "Balora Bags' brand st
 export default function AboutPage() {
   return (
     <div>
-      <section className="relative h-[60vh] flex items-end section-padding pb-16">
-        <Image
-          src="https://images.unsplash.com/photo-1598532213919-078e54dd1f3c?q=80&w=2000&auto=format&fit=crop"
-          alt="Balora bags being handmade"
-          fill
-          className="object-cover -z-10"
-        />
-        <div className="absolute inset-0 bg-ink/40 -z-10" />
-        <div className="text-cream">
+      <section className="relative flex items-center justify-center text-center section-padding py-28 bg-gradient-to-br from-forest via-forest to-forest-dark overflow-hidden">
+        <div className="absolute inset-0 opacity-[0.07]" style={{ backgroundImage: 'radial-gradient(circle, #FBF0F2 1px, transparent 1px)', backgroundSize: '28px 28px' }} />
+        <div className="relative text-cream">
           <p className="eyebrow text-sand mb-3">Our Story</p>
-          <h1 className="font-display text-4xl md:text-6xl max-w-xl">About Balora</h1>
+          <h1 className="font-display text-4xl md:text-6xl max-w-xl mx-auto">About Balora</h1>
         </div>
       </section>
 
@@ -45,13 +38,10 @@ export default function AboutPage() {
             <li>— A personal relationship with every customer we serve</li>
           </ul>
         </div>
-        <div className="relative aspect-[4/5] bg-sand">
-          <Image
-            src="https://images.unsplash.com/photo-1584917865442-de89df76afd3?q=80&w=1200&auto=format&fit=crop"
-            alt="Handmade Balora bag"
-            fill
-            className="object-cover"
-          />
+        <div className="relative aspect-[4/5] bg-clay flex items-center justify-center overflow-hidden">
+          <p className="font-display italic text-cream/90 text-5xl md:text-6xl text-center px-8 leading-tight">
+            balance
+          </p>
         </div>
       </section>
 

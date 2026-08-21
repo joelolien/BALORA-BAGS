@@ -53,16 +53,8 @@ export default async function HomePage() {
   return (
     <div>
       {/* HERO */}
-      <section className="relative min-h-[88vh] flex items-end section-padding pb-20 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-forest-dark/10 via-transparent to-ink/40">
-          <Image
-            src="https://images.unsplash.com/photo-1591561954557-26941169b49e?q=80&w=2000&auto=format&fit=crop"
-            alt="Handmade crochet bag by Balora"
-            fill
-            priority
-            className="object-cover -z-10"
-          />
-        </div>
+      <section className="relative min-h-[80vh] flex items-center section-padding py-24 overflow-hidden bg-gradient-to-br from-forest via-forest to-forest-dark">
+        <div className="absolute inset-0 opacity-[0.07]" style={{ backgroundImage: 'radial-gradient(circle, #FBF0F2 1px, transparent 1px)', backgroundSize: '28px 28px' }} />
         <div className="relative max-w-2xl text-cream animate-fadeUp">
           <p className="eyebrow text-sand mb-4">Handmade in Accra, Ghana</p>
           <h1 className="font-display text-5xl md:text-7xl leading-[1.05] mb-6">

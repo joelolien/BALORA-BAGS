@@ -5,20 +5,20 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        cream: '#F6F1E7',
-        paper: '#FBF8F2',
-        ink: '#241F19',
+        cream: '#FBF0F2',
+        paper: '#FEF9FA',
+        ink: '#251F23',
         forest: {
-          DEFAULT: '#3E4A37',
-          light: '#5C6B52',
-          dark: '#28311F',
+          DEFAULT: '#8B6B80',
+          light: '#A8869C',
+          dark: '#57414F',
         },
         clay: {
-          DEFAULT: '#B9704A',
-          light: '#D69169',
-          dark: '#8F5636',
+          DEFAULT: '#B97690',
+          light: '#D6A0B3',
+          dark: '#8F5169',
         },
-        sand: '#E6DAC3',
+        sand: '#F0DCE1',
         gold: '#AC8A50',
       },
       fontFamily: {

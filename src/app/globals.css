@@ -13,10 +13,10 @@
     @apply font-display;
   }
   ::selection {
-    background-color: #E6DAC3;
+    background-color: #F0DCE1;
   }
   :focus-visible {
-    outline: 2px solid #3E4A37;
+    outline: 2px solid #8B6B80;
     outline-offset: 2px;
   }
 }
