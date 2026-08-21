@@ -14,6 +14,10 @@ export async function POST(req: Request) {
     return NextResponse.json(result);
   } catch (err: any) {
     console.error('Upload error:', err);
-    return NextResponse.json({ error: 'Image upload failed. Check your Cloudinary configuration.' }, { status: 500 });
+    const detail = err?.message || 'Unknown error';
+    return NextResponse.json(
+      { error: `Image upload failed: ${detail}` },
+      { status: 500 }
+    );
   }
 }
