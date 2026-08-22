@@ -10,7 +10,7 @@ export default function ShippingPage() {
       <h2 className="text-lg text-ink font-display pt-4">Processing time</h2>
       <p>Because every bag is handmade to order, please allow 1–2 weeks for your order to be crafted before it is dispatched for delivery. Ready-stock items may ship sooner.</p>
       <h2 className="text-lg text-ink font-display pt-4">Delivery time & fees</h2>
-      <p>Once dispatched, delivery within Accra typically takes 1–3 working days. Delivery fees vary by area and are calculated at checkout based on your selected region and city.</p>
+      <p>We don't charge or collect a delivery fee through the website. Once your order is confirmed and ready, we'll message you directly on WhatsApp to arrange delivery via Yango — the delivery fee for your Yango trip is paid separately at that time, based on your location.</p>
       <h2 className="text-lg text-ink font-display pt-4">Order tracking</h2>
       <p>You can track the status of your order at any time using our Track Order page with your order number and the email or phone used at checkout.</p>
       <h2 className="text-lg text-ink font-display pt-4">Delivery issues</h2>

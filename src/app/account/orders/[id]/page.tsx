@@ -31,15 +31,23 @@ export default async function OrderDetailPage({ params }: { params: { id: string
 
         <div className="grid sm:grid-cols-2 gap-8 mb-10">
           <div>
-            <p className="eyebrow mb-2">Delivery Address</p>
-            <p className="text-sm">{order.deliveryAddress}</p>
-            <p className="text-sm">{order.city}, {order.region}</p>
+            <p className="eyebrow mb-2">Delivery</p>
+            {order.deliveryAddress ? (
+              <>
+                <p className="text-sm">{order.deliveryAddress}</p>
+                <p className="text-sm">{order.city}, {order.region}</p>
+              </>
+            ) : (
+              <p className="text-sm text-ink/60">We'll message you on WhatsApp to arrange delivery.</p>
+            )}
           </div>
           <div>
             <p className="eyebrow mb-2">Order Total</p>
             <div className="text-sm space-y-1">
               <div className="flex justify-between max-w-xs"><span>Subtotal</span><span>{formatGHS(order.subtotal)}</span></div>
-              <div className="flex justify-between max-w-xs"><span>Delivery</span><span>{formatGHS(order.deliveryFee)}</span></div>
+              {Number(order.deliveryFee) > 0 && (
+                <div className="flex justify-between max-w-xs"><span>Delivery</span><span>{formatGHS(order.deliveryFee)}</span></div>
+              )}
               {Number(order.discountAmount) > 0 && (
                 <div className="flex justify-between max-w-xs"><span>Discount</span><span>-{formatGHS(order.discountAmount)}</span></div>
               )}

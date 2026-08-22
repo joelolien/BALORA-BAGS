@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
-  LayoutDashboard, Package, ShoppingBag, Users, Tag, Settings, Truck, FolderTree,
+  LayoutDashboard, Package, ShoppingBag, Users, Tag, Settings, FolderTree,
 } from 'lucide-react';
 
 const LINKS = [
@@ -13,7 +13,6 @@ const LINKS = [
   { href: '/admin/orders', label: 'Orders', icon: ShoppingBag },
   { href: '/admin/customers', label: 'Customers', icon: Users },
   { href: '/admin/promo-codes', label: 'Promo Codes', icon: Tag },
-  { href: '/admin/delivery', label: 'Delivery', icon: Truck },
   { href: '/admin/settings', label: 'Settings', icon: Settings },
 ];
 

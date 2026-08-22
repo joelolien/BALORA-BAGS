@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { prisma } from '@/lib/prisma';
-import { priceCart, validatePromoCode, getDeliveryFee, type CartLine } from '@/lib/pricing';
+import { priceCart, validatePromoCode, type CartLine } from '@/lib/pricing';
 import { generateOrderNumber } from '@/lib/utils';
 import { initializePaystackTransaction } from '@/lib/paystack';
 import { getAuthSession } from '@/lib/auth';
@@ -10,12 +10,7 @@ import { sendOrderConfirmationEmail } from '@/lib/email';
 const checkoutSchema = z.object({
   customerName: z.string().min(2),
   customerEmail: z.string().email(),
-  customerPhone: z.string().min(9),
-  deliveryAddress: z.string().min(5),
-  city: z.string().min(2),
-  region: z.string().min(2),
-  deliveryNotes: z.string().optional(),
-  deliveryMethod: z.string().default('Standard Delivery'),
+  customerPhone: z.string().min(9, 'Enter a valid WhatsApp number'),
   paymentMethod: z.enum(['paystack', 'cash_on_delivery', 'bank_transfer']),
   promoCode: z.string().optional(),
   lines: z
@@ -41,8 +36,10 @@ export async function POST(req: Request) {
     const session = await getAuthSession();
 
     // 1. Re-price everything server-side. Never trust amounts from the client.
+    // No delivery fee is charged here — delivery is arranged manually via
+    // Yango after the order is confirmed, coordinated over WhatsApp.
     const { items, subtotal } = await priceCart(data.lines as CartLine[]);
-    const deliveryFee = await getDeliveryFee(data.region, data.city);
+    const deliveryFee = 0;
 
     let discountAmount = 0;
     let promoCodeId: string | undefined;
@@ -67,11 +64,6 @@ export async function POST(req: Request) {
           customerName: data.customerName,
           customerEmail: data.customerEmail.toLowerCase().trim(),
           customerPhone: data.customerPhone,
-          deliveryAddress: data.deliveryAddress,
-          city: data.city,
-          region: data.region,
-          deliveryNotes: data.deliveryNotes,
-          deliveryMethod: data.deliveryMethod,
           subtotal,
           deliveryFee,
           discountAmount,

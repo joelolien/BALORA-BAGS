@@ -62,6 +62,7 @@ export default function AdminOrdersPage() {
                   <td className="p-4">
                     <p>{o.customerName}</p>
                     <p className="text-xs text-ink/50">{o.customerEmail}</p>
+                    <p className="text-xs text-ink/50">{o.customerPhone}</p>
                   </td>
                   <td className="p-4 text-ink/60">{new Date(o.createdAt).toLocaleDateString()}</td>
                   <td className="p-4">{o.status.replace(/_/g, ' ')}</td>

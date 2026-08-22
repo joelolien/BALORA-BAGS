@@ -7,19 +7,12 @@ import { formatGHS } from '@/lib/utils';
 import { toast } from 'sonner';
 import Link from 'next/link';
 
-const GHANA_REGIONS = [
-  'Greater Accra', 'Ashanti', 'Western', 'Eastern', 'Central', 'Volta',
-  'Northern', 'Upper East', 'Upper West', 'Bono', 'Bono East', 'Ahafo',
-  'Savannah', 'North East', 'Oti', 'Western North',
-];
-
 export default function CheckoutPage() {
   const { items, subtotal, clearCart } = useCart();
   const router = useRouter();
 
   const [form, setForm] = useState({
     customerName: '', customerEmail: '', customerPhone: '',
-    deliveryAddress: '', city: '', region: 'Greater Accra', deliveryNotes: '',
   });
   const [paymentMethod, setPaymentMethod] = useState<'paystack' | 'cash_on_delivery' | 'bank_transfer'>('paystack');
   const [promoCode, setPromoCode] = useState('');
@@ -28,9 +21,8 @@ export default function CheckoutPage() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
 
-  const deliveryFee = 25; // Displayed estimate; authoritative fee is recalculated server-side.
   const discount = promoResult?.discountAmount ?? 0;
-  const total = Math.max(0, subtotal + deliveryFee - discount);
+  const total = Math.max(0, subtotal - discount);
 
   const lines = useMemo(
     () => items.map((i) => ({ productId: i.productId, quantity: i.quantity, colour: i.colour, variantInfo: i.variantInfo })),
@@ -45,9 +37,7 @@ export default function CheckoutPage() {
     const e: Record<string, string> = {};
     if (!form.customerName.trim()) e.customerName = 'Name is required';
     if (!/^\S+@\S+\.\S+$/.test(form.customerEmail)) e.customerEmail = 'Enter a valid email';
-    if (form.customerPhone.trim().length < 9) e.customerPhone = 'Enter a valid phone number';
-    if (!form.deliveryAddress.trim()) e.deliveryAddress = 'Delivery address is required';
-    if (!form.city.trim()) e.city = 'City is required';
+    if (form.customerPhone.trim().length < 9) e.customerPhone = 'Enter a valid WhatsApp number';
     setErrors(e);
     return Object.keys(e).length === 0;
   }
@@ -90,7 +80,6 @@ export default function CheckoutPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...form,
-          deliveryMethod: 'Standard Delivery',
           paymentMethod,
           promoCode: promoResult?.code,
           lines,
@@ -130,14 +119,14 @@ export default function CheckoutPage() {
 
         <div className="space-y-8">
           <fieldset className="space-y-4">
-            <legend className="eyebrow mb-3">Contact & Delivery</legend>
+            <legend className="eyebrow mb-3">Your Details</legend>
             <div className="grid sm:grid-cols-2 gap-4">
               <div>
                 <input className="input-field" placeholder="Full name" value={form.customerName} onChange={(e) => update('customerName', e.target.value)} />
                 {errors.customerName && <p className="text-xs text-red-600 mt-1">{errors.customerName}</p>}
               </div>
               <div>
-                <input className="input-field" placeholder="Phone number" value={form.customerPhone} onChange={(e) => update('customerPhone', e.target.value)} />
+                <input className="input-field" placeholder="WhatsApp number" value={form.customerPhone} onChange={(e) => update('customerPhone', e.target.value)} />
                 {errors.customerPhone && <p className="text-xs text-red-600 mt-1">{errors.customerPhone}</p>}
               </div>
             </div>
@@ -145,20 +134,9 @@ export default function CheckoutPage() {
               <input className="input-field" placeholder="Email address" value={form.customerEmail} onChange={(e) => update('customerEmail', e.target.value)} />
               {errors.customerEmail && <p className="text-xs text-red-600 mt-1">{errors.customerEmail}</p>}
             </div>
-            <div>
-              <input className="input-field" placeholder="Delivery address" value={form.deliveryAddress} onChange={(e) => update('deliveryAddress', e.target.value)} />
-              {errors.deliveryAddress && <p className="text-xs text-red-600 mt-1">{errors.deliveryAddress}</p>}
-            </div>
-            <div className="grid sm:grid-cols-2 gap-4">
-              <div>
-                <input className="input-field" placeholder="City" value={form.city} onChange={(e) => update('city', e.target.value)} />
-                {errors.city && <p className="text-xs text-red-600 mt-1">{errors.city}</p>}
-              </div>
-              <select className="input-field" value={form.region} onChange={(e) => update('region', e.target.value)}>
-                {GHANA_REGIONS.map((r) => <option key={r} value={r}>{r}</option>)}
-              </select>
-            </div>
-            <textarea className="input-field" placeholder="Additional delivery instructions (optional)" value={form.deliveryNotes} onChange={(e) => update('deliveryNotes', e.target.value)} />
+            <p className="text-xs text-ink/50">
+              We'll message you on WhatsApp to arrange delivery once your order is ready.
+            </p>
           </fieldset>
 
           <fieldset>
@@ -167,7 +145,7 @@ export default function CheckoutPage() {
               {[
                 { value: 'paystack', label: 'Pay Now — Mobile Money / Card (via Paystack)' },
                 { value: 'bank_transfer', label: 'Bank Transfer (details sent after order)' },
-                { value: 'cash_on_delivery', label: 'Cash on Delivery (Accra only)' },
+                { value: 'cash_on_delivery', label: 'Cash on Delivery' },
               ].map((opt) => (
                 <label key={opt.value} className="flex items-center gap-3 border border-ink/15 px-4 py-3 cursor-pointer has-[:checked]:border-forest">
                   <input type="radio" name="paymentMethod" checked={paymentMethod === opt.value} onChange={() => setPaymentMethod(opt.value as any)} />
@@ -199,7 +177,6 @@ export default function CheckoutPage() {
 
         <div className="space-y-2 text-sm border-t border-ink/10 pt-4">
           <div className="flex justify-between"><span>Subtotal</span><span>{formatGHS(subtotal)}</span></div>
-          <div className="flex justify-between"><span>Delivery (estimated)</span><span>{formatGHS(deliveryFee)}</span></div>
           {discount > 0 && <div className="flex justify-between text-clay-dark"><span>Discount ({promoResult?.code})</span><span>-{formatGHS(discount)}</span></div>}
           <div className="flex justify-between text-base font-medium border-t border-ink/10 pt-2 mt-2">
             <span>Total</span><span>{formatGHS(total)}</span>
@@ -209,7 +186,7 @@ export default function CheckoutPage() {
         <button onClick={submitOrder} disabled={submitting} className="btn-primary w-full mt-6">
           {submitting ? 'Placing Order...' : 'Place Order'}
         </button>
-        <p className="text-xs text-ink/40 mt-3">Delivery fee is confirmed based on your region at order confirmation.</p>
+        <p className="text-xs text-ink/40 mt-3">Delivery is arranged separately after your order is confirmed.</p>
       </div>
     </div>
   );

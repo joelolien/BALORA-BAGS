@@ -207,11 +207,11 @@ model Order {
   customerName    String
   customerEmail   String
   customerPhone   String
-  deliveryAddress String
-  city            String
-  region          String
+  deliveryAddress String?
+  city            String?
+  region          String?
   deliveryNotes   String?
-  deliveryMethod  String        @default("Standard Delivery")
+  deliveryMethod  String        @default("Coordinated via WhatsApp (Yango)")
 
   subtotal        Decimal       @db.Decimal(10, 2)
   deliveryFee     Decimal       @db.Decimal(10, 2) @default(0)
@@ -316,5 +316,6 @@ model StoreSettings {
   tiktokHandle    String  @default("balora.bags")
   currency        String  @default("GHS")
   businessHours   String  @default("Mon–Fri: 9:00 AM – 6:00 PM, Sat: 10:00 AM – 4:00 PM, Sun: Closed")
+  instagramImages String[] @default([])
   updatedAt       DateTime @updatedAt
 }

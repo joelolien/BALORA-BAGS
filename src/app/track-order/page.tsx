@@ -109,9 +109,15 @@ function TrackOrderContent() {
 
           <div className="grid sm:grid-cols-2 gap-6 mb-8 text-sm">
             <div>
-              <p className="eyebrow mb-2">Delivery Information</p>
-              <p>{order.deliveryAddress}</p>
-              <p>{order.city}, {order.region}</p>
+              <p className="eyebrow mb-2">Delivery</p>
+              {order.deliveryAddress ? (
+                <>
+                  <p>{order.deliveryAddress}</p>
+                  <p>{order.city}, {order.region}</p>
+                </>
+              ) : (
+                <p className="text-ink/60">We'll message you on WhatsApp to arrange delivery.</p>
+              )}
             </div>
             <div>
               <p className="eyebrow mb-2">Payment</p>

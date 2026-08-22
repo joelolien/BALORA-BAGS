@@ -7,7 +7,7 @@ const FAQ_SECTIONS = [
     title: 'Delivery & Returns',
     items: [
       { q: 'Where do you deliver to?', a: "We currently deliver within Accra only. We're working on expanding to other regions of Ghana soon — sign up to our newsletter to be notified." },
-      { q: 'How long does delivery take?', a: 'Once your order is ready, delivery within Accra typically takes 1–3 working days depending on your area and our dispatch schedule.' },
+      { q: 'How long does delivery take?', a: "Once your order is ready, we'll message you on WhatsApp to arrange delivery via Yango — timing depends on your location and rider availability at that time." },
       { q: 'What is your processing time?', a: 'Our bags are handmade to order, so processing times vary with order volume. Please allow 1–2 weeks for your bag to be made and prepared for delivery.' },
       { q: 'Do you accept returns?', a: 'We do not accept returns. However, we offer a hassle-free exchange policy — reach out via WhatsApp or Instagram within 5 days of receiving your bag.' },
     ],
