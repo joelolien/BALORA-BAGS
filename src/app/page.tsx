@@ -56,12 +56,7 @@ export default async function HomePage() {
     <div>
       {/* HERO */}
       <section className="relative min-h-[85vh] flex items-center overflow-hidden">
-        {/* Blurred, zoomed copy fills the whole background seamlessly */}
-        <video autoPlay muted loop playsInline className="absolute inset-0 w-full h-full object-cover scale-110 blur-2xl">
-          <source src="/videos/hero.mp4" type="video/mp4" />
-        </video>
-        {/* Sharp copy, shown in full — not cropped, unlike a plain object-cover background */}
-        <video autoPlay muted loop playsInline className="absolute inset-0 w-full h-full object-contain">
+        <video autoPlay muted loop playsInline className="absolute inset-0 w-full h-full object-cover">
           <source src="/videos/hero.mp4" type="video/mp4" />
         </video>
         <div className="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/20 to-ink/60" />
