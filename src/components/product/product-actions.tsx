@@ -148,7 +148,7 @@ export function ProductActions({ product }: { product: Product }) {
 
       {product.isCustomOrder && (
         <p className="text-xs text-ink/50 mt-4">
-          This is a made-to-order piece. Please allow 1–2 weeks for crafting before delivery.
+          This is a made-to-order piece. Please allow 3–4 days for crafting before delivery.
         </p>
       )}
     </div>

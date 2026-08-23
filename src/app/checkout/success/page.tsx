@@ -16,7 +16,7 @@ function CheckoutSuccessContent() {
   useEffect(() => {
     if (!orderNumber) return;
 
-    if (method === 'cash_on_delivery' || method === 'bank_transfer') {
+    if (method === 'bank_transfer') {
       setState('pending');
       return;
     }
@@ -63,7 +63,6 @@ function CheckoutSuccessContent() {
           <p className="text-ink/60 mb-8">
             Order <strong>{orderNumber}</strong> has been placed.{' '}
             {method === 'bank_transfer' && "We'll send bank transfer details via WhatsApp shortly."}
-            {method === 'cash_on_delivery' && "You'll pay in cash when your order is delivered."}
           </p>
         </>
       )}

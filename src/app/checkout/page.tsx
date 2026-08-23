@@ -14,7 +14,7 @@ export default function CheckoutPage() {
   const [form, setForm] = useState({
     customerName: '', customerEmail: '', customerPhone: '',
   });
-  const [paymentMethod, setPaymentMethod] = useState<'paystack' | 'cash_on_delivery' | 'bank_transfer'>('paystack');
+  const [paymentMethod, setPaymentMethod] = useState<'paystack' | 'bank_transfer'>('paystack');
   const [promoCode, setPromoCode] = useState('');
   const [promoResult, setPromoResult] = useState<{ discountAmount: number; code: string } | null>(null);
   const [promoLoading, setPromoLoading] = useState(false);
@@ -145,7 +145,6 @@ export default function CheckoutPage() {
               {[
                 { value: 'paystack', label: 'Pay Now — Mobile Money / Card (via Paystack)' },
                 { value: 'bank_transfer', label: 'Bank Transfer (details sent after order)' },
-                { value: 'cash_on_delivery', label: 'Cash on Delivery' },
               ].map((opt) => (
                 <label key={opt.value} className="flex items-center gap-3 border border-ink/15 px-4 py-3 cursor-pointer has-[:checked]:border-forest">
                   <input type="radio" name="paymentMethod" checked={paymentMethod === opt.value} onChange={() => setPaymentMethod(opt.value as any)} />

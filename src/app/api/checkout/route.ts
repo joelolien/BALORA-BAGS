@@ -11,7 +11,7 @@ const checkoutSchema = z.object({
   customerName: z.string().min(2),
   customerEmail: z.string().email(),
   customerPhone: z.string().min(9, 'Enter a valid WhatsApp number'),
-  paymentMethod: z.enum(['paystack', 'cash_on_delivery', 'bank_transfer']),
+  paymentMethod: z.enum(['paystack', 'bank_transfer']),
   promoCode: z.string().optional(),
   lines: z
     .array(

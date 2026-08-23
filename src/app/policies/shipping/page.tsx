@@ -8,7 +8,7 @@ export default function ShippingPage() {
       <h2 className="text-lg text-ink font-display">Delivery area</h2>
       <p>We currently deliver within Accra, Ghana. We plan to expand delivery to additional regions — join our newsletter to be notified when this happens.</p>
       <h2 className="text-lg text-ink font-display pt-4">Processing time</h2>
-      <p>Because every bag is handmade to order, please allow 1–2 weeks for your order to be crafted before it is dispatched for delivery. Ready-stock items may ship sooner.</p>
+      <p>Because every bag is handmade to order, please allow 3–4 days for your order to be crafted before it is dispatched for delivery. Ready-stock items may ship sooner.</p>
       <h2 className="text-lg text-ink font-display pt-4">Delivery time & fees</h2>
       <p>We don't charge or collect a delivery fee through the website. Once your order is confirmed and ready, we'll message you directly on WhatsApp to arrange delivery via Yango — the delivery fee for your Yango trip is paid separately at that time, based on your location.</p>
       <h2 className="text-lg text-ink font-display pt-4">Order tracking</h2>

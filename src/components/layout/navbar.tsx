@@ -100,30 +100,30 @@ export function Navbar() {
             </div>
           </form>
         )}
-
-        {menuOpen && (
-          <div className="fixed inset-0 z-50 bg-ink/40" onClick={() => setMenuOpen(false)}>
-            <div
-              className="absolute left-0 top-0 h-full w-72 bg-cream p-6 flex flex-col gap-6"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <button aria-label="Close menu" onClick={() => setMenuOpen(false)} className="self-end">
-                <X size={22} />
-              </button>
-              {LINKS.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  onClick={() => setMenuOpen(false)}
-                  className="text-lg font-display"
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </div>
-          </div>
-        )}
       </header>
+
+      {menuOpen && (
+        <div className="fixed inset-0 z-50 bg-ink/40" onClick={() => setMenuOpen(false)}>
+          <div
+            className="absolute left-0 top-0 h-full w-72 bg-cream p-6 flex flex-col gap-6"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button aria-label="Close menu" onClick={() => setMenuOpen(false)} className="self-end">
+              <X size={22} />
+            </button>
+            {LINKS.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                onClick={() => setMenuOpen(false)}
+                className="text-lg font-display"
+              >
+                {link.label}
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
 
       <CartDrawer />
     </>
