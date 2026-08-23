@@ -55,10 +55,19 @@ export default async function HomePage() {
   return (
     <div>
       {/* HERO */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-forest via-forest to-forest-dark section-padding py-16 md:py-20">
-        <div className="absolute inset-0 opacity-[0.07]" style={{ backgroundImage: 'radial-gradient(circle, #FBF0F2 1px, transparent 1px)', backgroundSize: '28px 28px' }} />
-        <div className="relative max-w-7xl mx-auto grid md:grid-cols-2 gap-10 md:gap-16 items-center">
-          <div className="text-cream animate-fadeUp order-2 md:order-1">
+      <section className="relative min-h-[85vh] flex items-center overflow-hidden">
+        {/* Blurred, zoomed copy fills the whole background seamlessly */}
+        <video autoPlay muted loop playsInline className="absolute inset-0 w-full h-full object-cover scale-110 blur-2xl">
+          <source src="/videos/hero.mp4" type="video/mp4" />
+        </video>
+        {/* Sharp copy, shown in full — not cropped, unlike a plain object-cover background */}
+        <video autoPlay muted loop playsInline className="absolute inset-0 w-full h-full object-contain">
+          <source src="/videos/hero.mp4" type="video/mp4" />
+        </video>
+        <div className="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/20 to-ink/60" />
+
+        <div className="relative section-padding w-full">
+          <div className="max-w-xl text-cream animate-fadeUp">
             <p className="eyebrow text-sand mb-4">Handmade in Accra, Ghana</p>
             <h1 className="font-display text-4xl sm:text-5xl md:text-6xl leading-[1.05] mb-6">
               Bags made with <em className="italic text-clay-light">balance</em>, worn with intention.
@@ -74,14 +83,6 @@ export default async function HomePage() {
               <Link href="/about" className="border border-cream/50 text-cream px-7 py-3.5 text-sm tracking-wide uppercase hover:bg-cream/10 transition-colors">
                 Our Story
               </Link>
-            </div>
-          </div>
-
-          <div className="order-1 md:order-2 flex justify-center">
-            <div className="relative w-full max-w-[380px] aspect-[9/16] rounded-2xl overflow-hidden shadow-2xl ring-1 ring-cream/10">
-              <video autoPlay muted loop playsInline className="w-full h-full object-cover">
-                <source src="/videos/hero.mp4" type="video/mp4" />
-              </video>
             </div>
           </div>
         </div>
