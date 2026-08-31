@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { prisma } from '@/lib/prisma';
 import { ProductCard } from '@/components/product/product-card';
 import { NewsletterForm } from '@/components/newsletter-form';
+import { HeroVideo } from '@/components/hero-video';
 
 // Render this page fresh on each request instead of at build time, since
 // product data changes constantly and the database may not be migrated yet
@@ -56,9 +57,7 @@ export default async function HomePage() {
     <div>
       {/* HERO */}
       <section className="relative min-h-[85vh] flex items-center overflow-hidden">
-        <video autoPlay muted loop playsInline className="absolute inset-0 w-full h-full object-cover">
-          <source src="/videos/hero.mp4" type="video/mp4" />
-        </video>
+        <HeroVideo />
         <div className="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/20 to-ink/60" />
 
         <div className="relative section-padding w-full">
