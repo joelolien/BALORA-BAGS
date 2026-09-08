@@ -305,6 +305,7 @@ model DeliveryZone {
   @@unique([region, city])
 }
 
+model Testimonial { id String @id @default(cuid()) customerName String quote String location String? isActive Boolean @default(true) sortOrder Int @default(0) createdAt DateTime @default(now()) }
 model StoreSettings {
   id              String  @id @default("singleton")
   businessName    String  @default("Balora Bags")

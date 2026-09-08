@@ -11,7 +11,7 @@ import { HeroVideo } from '@/components/hero-video';
 export const dynamic = 'force-dynamic';
 
 async function getHomeData() {
-  const [featured, newArrivals, bestSellers, categories, settings] = await Promise.all([
+  const [featured, newArrivals, bestSellers, categories, settings, testimonials] = await Promise.all([
     prisma.product.findMany({
       where: { isActive: true, isFeatured: true },
       include: { images: { orderBy: { sortOrder: 'asc' }, take: 1 } },
@@ -30,8 +30,9 @@ async function getHomeData() {
     }),
     prisma.category.findMany({ where: { isActive: true }, orderBy: { sortOrder: 'asc' }, take: 4 }),
     prisma.storeSettings.findUnique({ where: { id: 'singleton' } }),
+    prisma.testimonial.findMany({ where: { isActive: true }, orderBy: { sortOrder: 'asc' } }),
   ]);
-  return { featured, newArrivals, bestSellers, categories, settings };
+  return { featured, newArrivals, bestSellers, categories, settings, testimonials };
 }
 
 function toCardData(p: any) {
@@ -49,7 +50,7 @@ function toCardData(p: any) {
 }
 
 export default async function HomePage() {
-  const { featured, newArrivals, bestSellers, categories, settings } = await getHomeData();
+  const { featured, newArrivals, bestSellers, categories, settings, testimonials } = await getHomeData();
   const instagramImages = settings?.instagramImages || [];
   const spotlight = featured.length ? featured : newArrivals;
 
@@ -193,20 +194,25 @@ export default async function HomePage() {
       </section>
 
       {/* TESTIMONIALS */}
-      <section className="section-padding py-20 bg-forest text-cream">
-        <div className="text-center mb-12">
-          <p className="eyebrow text-sand mb-3">Testimonials</p>
-          <h2 className="text-3xl md:text-4xl">What our customers say</h2>
-        </div>
-        <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-          {TESTIMONIALS.map((t) => (
-            <div key={t.name} className="border border-cream/20 p-6">
-              <p className="text-cream/90 leading-relaxed mb-4">&ldquo;{t.quote}&rdquo;</p>
-              <p className="text-sm text-sand">{t.name}</p>
-            </div>
-          ))}
-        </div>
-      </section>
+      {testimonials.length > 0 && (
+        <section className="section-padding py-20 bg-forest text-cream">
+          <div className="text-center mb-12">
+            <p className="eyebrow text-sand mb-3">Testimonials</p>
+            <h2 className="text-3xl md:text-4xl">What our customers say</h2>
+          </div>
+          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+            {testimonials.map((t) => (
+              <div key={t.id} className="border border-cream/20 p-6">
+                <p className="text-cream/90 leading-relaxed mb-4">&ldquo;{t.quote}&rdquo;</p>
+                <p className="text-sm text-sand">
+                  {t.customerName}
+                  {t.location ? `, ${t.location}` : ''}
+                </p>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* INSTAGRAM */}
       {instagramImages.length > 0 && (
@@ -246,10 +252,4 @@ const PLACEHOLDER_CATEGORIES = [
   { slug: 'clutch-bags', name: 'Clutch Bags', imageUrl: null },
   { slug: 'tote-bags', name: 'Tote Bags', imageUrl: null },
   { slug: 'crossbody-bags', name: 'Crossbody Bags', imageUrl: null },
-];
-
-const TESTIMONIALS = [
-  { name: 'Abena K., Accra', quote: 'The quality is stunning and mine was made in my exact colours. Feels so much more special than a shop-bought bag.' },
-  { name: 'Efua T., Kumasi', quote: 'Delivery was quick and the packaging alone felt premium. This is my third Balora bag!' },
-  { name: 'Naana O., Accra', quote: 'I get compliments every time I carry it. Handmade really does make a difference.' },
 ];
