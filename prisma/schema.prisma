@@ -27,11 +27,11 @@ model User {
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
-  addresses      Address[]
-  orders         Order[]
-  reviews        Review[]
-  wishlistItems  WishlistItem[]
-  resetTokens    PasswordResetToken[]
+  addresses     Address[]
+  orders        Order[]
+  reviews       Review[]
+  wishlistItems WishlistItem[]
+  resetTokens   PasswordResetToken[]
 
   @@index([email])
 }
@@ -138,8 +138,8 @@ model ProductVariant {
   id        String  @id @default(cuid())
   productId String
   product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
-  name      String // e.g. "Size", "Strap length"
-  value     String // e.g. "Small", "Long strap"
+  name      String
+  value     String
   stock     Int     @default(0)
 
   @@index([productId])
@@ -257,7 +257,7 @@ model Payment {
   order         Order         @relation(fields: [orderId], references: [id], onDelete: Cascade)
   provider      String        @default("paystack")
   reference     String        @unique
-  channel       String? // mobile_money, card, bank_transfer, cash
+  channel       String?
   amount        Decimal       @db.Decimal(10, 2)
   status        PaymentStatus @default(PENDING)
   rawResponse   Json?
@@ -275,18 +275,18 @@ enum DiscountType {
 }
 
 model PromoCode {
-  id              String       @id @default(cuid())
-  code            String       @unique
-  discountType    DiscountType
-  discountValue   Decimal      @db.Decimal(10, 2)
-  minOrderValue   Decimal      @db.Decimal(10, 2) @default(0)
-  usageLimit      Int?
-  usageCount      Int          @default(0)
-  expiresAt       DateTime?
-  isActive        Boolean      @default(true)
-  createdAt       DateTime     @default(now())
+  id            String       @id @default(cuid())
+  code          String       @unique
+  discountType  DiscountType
+  discountValue Decimal      @db.Decimal(10, 2)
+  minOrderValue Decimal      @db.Decimal(10, 2) @default(0)
+  usageLimit    Int?
+  usageCount    Int          @default(0)
+  expiresAt     DateTime?
+  isActive      Boolean      @default(true)
+  createdAt     DateTime     @default(now())
 
-  orders          Order[]
+  orders        Order[]
 }
 
 // ────────────────────────────────────────────────────────────
@@ -305,18 +305,27 @@ model DeliveryZone {
   @@unique([region, city])
 }
 
-model Testimonial { id String @id @default(cuid()) customerName String quote String location String? isActive Boolean @default(true) sortOrder Int @default(0) createdAt DateTime @default(now()) }
+model Testimonial {
+  id           String   @id @default(cuid())
+  customerName String
+  quote        String
+  location     String?
+  isActive     Boolean  @default(true)
+  sortOrder    Int      @default(0)
+  createdAt    DateTime @default(now())
+}
+
 model StoreSettings {
-  id              String  @id @default("singleton")
-  businessName    String  @default("Balora Bags")
-  logoUrl         String?
-  email           String  @default("balora.bagss@gmail.com")
-  phone           String?
-  whatsappNumber  String  @default("233540784922")
-  instagramHandle String  @default("balora_bags")
-  tiktokHandle    String  @default("balora.bags")
-  currency        String  @default("GHS")
-  businessHours   String  @default("Mon–Fri: 9:00 AM – 6:00 PM, Sat: 10:00 AM – 4:00 PM, Sun: Closed")
-  instagramImages String[] @default([])
-  updatedAt       DateTime @updatedAt
+  id               String   @id @default("singleton")
+  businessName     String   @default("Balora Bags")
+  logoUrl          String?
+  email            String   @default("balora.bagss@gmail.com")
+  phone            String?
+  whatsappNumber   String   @default("233540784922")
+  instagramHandle  String   @default("balora_bags")
+  tiktokHandle     String   @default("balora.bags")
+  currency         String   @default("GHS")
+  businessHours    String   @default("Mon–Fri: 9:00 AM – 6:00 PM, Sat: 10:00 AM – 4:00 PM, Sun: Closed")
+  instagramImages  String[] @default([])
+  updatedAt        DateTime @updatedAt
 }
