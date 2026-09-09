@@ -13,7 +13,7 @@ const LINKS = [
   { href: '/admin/orders', label: 'Orders', icon: ShoppingBag },
   { href: '/admin/customers', label: 'Customers', icon: Users },
   { href: '/admin/promo-codes', label: 'Promo Codes', icon: Tag },
-  { href: '/admin/testimonials', label: 'Testimonials', icon: Quote }
+  { href: '/admin/testimonials', label: 'Testimonials', icon: Quote },
   { href: '/admin/settings', label: 'Settings', icon: Settings },
 ];
 
